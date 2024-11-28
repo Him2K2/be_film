@@ -30,4 +30,8 @@ public class Payment {
     @JoinColumn(name = "userid")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "filmid")
+    private Film film;
+
 }

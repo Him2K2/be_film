@@ -2,6 +2,7 @@ package com.example.be_film.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +47,7 @@ public class User {
 
 
     @ManyToMany(mappedBy = "user_role")
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> role = new HashSet<>();
 }
 
 
