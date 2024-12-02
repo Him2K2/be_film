@@ -24,7 +24,6 @@ public class UserDTO {
     private String password;
     private String retypePassword;
     private String email;
-    @JsonProperty("date_of_birth")
     private int birth;
     private int budget ;
 

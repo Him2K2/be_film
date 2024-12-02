@@ -1,8 +1,10 @@
 package com.example.be_film.controller;
 
 import com.example.be_film.dtos.*;
+import com.example.be_film.model.User;
 import com.example.be_film.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO, BindingResult result) {
-
+    public ResponseEntity<?> createUser ( @RequestBody UserDTO userDTO, BindingResult result) {
         try {
             if (result.hasErrors()) {
                 List<String> errorMessages = result.getFieldErrors()
@@ -30,21 +32,32 @@ public class UserController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
-            if (!userDTO.getPassword().equals(userDTO.getRetypePassword()))
-                return ResponseEntity.ok("Resgiter Successfully");
-            return ResponseEntity.ok("Success");
+            // Kiểm tra mật khẩu và mật khẩu xác nhận
+            if (!userDTO.getPassword().equals(userDTO.getRetypePassword())) {
+                return ResponseEntity.badRequest().body("Passwords do not match");
+            }
+
+            User user = userService.createUser (userDTO);
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+
+
+
+
 
 
     }
     @PostMapping("/login")
     public ResponseEntity<?>login(@Valid @RequestBody UserLoginDTO userLoginDTO){
         //kiem tra thong tin dang nhap va sinh token
-        String token = userService.login(userLoginDTO.getUsername(),userLoginDTO.getPassword());
-        //tra ve token trong response
-        return ResponseEntity.ok("Some token");
+        try {
+            String token = userService.login(userLoginDTO.getUsername(),userLoginDTO.getPassword());
+            return ResponseEntity.ok(token);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
     }
 }

@@ -16,7 +16,8 @@ import java.util.Set;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
+
     @Column(name = "rolename")
     private String roleName;
 
@@ -25,6 +26,6 @@ public class Role {
             name = "role_user",
             joinColumns = @JoinColumn(name = "roleid"),
             inverseJoinColumns = @JoinColumn(name = "userid"))
-    private Set<User> user_role = new HashSet<>();
+    private Set<User> users = new HashSet<>();
 
 }
