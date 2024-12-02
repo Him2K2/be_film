@@ -3,6 +3,7 @@ package com.example.be_film.controller;
 import com.example.be_film.dtos.*;
 import com.example.be_film.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO, BindingResult result) {
 
@@ -31,7 +33,8 @@ public class UserController {
                 return ResponseEntity.badRequest().body(errorMessages);
             }
             if (!userDTO.getPassword().equals(userDTO.getRetypePassword()))
-                return ResponseEntity.ok("Resgiter Successfully");
+                return ResponseEntity.ok("Register fail");
+            userService.createUser(userDTO);
             return ResponseEntity.ok("Success");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
