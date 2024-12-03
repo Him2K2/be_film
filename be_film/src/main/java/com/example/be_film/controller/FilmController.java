@@ -38,7 +38,7 @@ public class FilmController {
     @GetMapping
     public ResponseEntity<Page<Film>> getAllFilms(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "5") int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Film> films = filmService.getAllFilm(pageRequest);
         return ResponseEntity.ok(films);

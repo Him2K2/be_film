@@ -86,7 +86,10 @@ public class UserService implements IUserService{
         }
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 
-        username,password );
+        username,password
+                ,existingUser.getAuthorities()
+
+                );
         //authenticate with java spring security;
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         return jwtTokenUtil.generateToken(existingUser);

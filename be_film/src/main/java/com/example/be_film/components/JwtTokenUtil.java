@@ -5,6 +5,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 
@@ -33,6 +34,7 @@ public class JwtTokenUtil {
                     .setExpiration(new Date(System.currentTimeMillis()+expiration*1000L))
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
+
             return token;
 
         }catch (Exception e){
@@ -63,6 +65,14 @@ return null;
     public boolean isTokenExpired(String token){
         Date expirationDate = this.extractClaim(token, Claims::getExpiration);
         return expirationDate.before(new Date());
+    }
+    public String extracUserName(String token){
+        return  extractClaim(token, Claims::getSubject);
+    }
+    public boolean validateToken (String token , UserDetails userDetails){
+        String username = extracUserName(token);
+        return (username.equals(userDetails.getUsername()))
+                && !isTokenExpired(token);
     }
 
 }

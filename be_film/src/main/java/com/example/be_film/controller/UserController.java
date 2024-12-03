@@ -23,7 +23,7 @@ public class UserController {
 
     private final UserService userService;
     @PostMapping("/register")
-    public ResponseEntity<?> createUser ( @RequestBody UserDTO userDTO, BindingResult result) {
+    public ResponseEntity<?> createUser (@Valid @RequestBody UserDTO userDTO, BindingResult result) {
         try {
             if (result.hasErrors()) {
                 List<String> errorMessages = result.getFieldErrors()
