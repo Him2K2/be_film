@@ -26,6 +26,7 @@ public class UserDTO {
     private String email;
     private int birth;
     private int budget ;
+    private Long roleId;
 
 
 }

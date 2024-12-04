@@ -21,7 +21,7 @@ import java.util.function.Function;
 public class JwtTokenUtil {
 
     private int expiration = 259000;
-    private String secretKey = "YnV0bmd1bW9taW11haXAxMw=="; // Đây là Base64 mã hóa của "butngumoimuaip13"
+    private String secretKey = "Y2xtbWphdmFhbmxvbG1lbmd1Y2hvZGVzZXVmaHVzaGV1ZmpmaXNqaWZqc3NzZGZzZGZzZGY="; // Đây là Base64 mã hóa của "butngumoimuaip13"
 
     public String generateToken(com.example.be_film.model.User user){
         //properties -> claims
@@ -39,7 +39,7 @@ public class JwtTokenUtil {
 
         }catch (Exception e){
 
-         System.out.println("loi tao token");
+         System.out.println("loi tao token: " + e);
 return null;
         }
     }

@@ -18,6 +18,7 @@ public class FilmDTO {
     private String imgFilm;
 
     private String urlFilm;
+    private String imgBannerFilm;
     private int duration;
     private String status;
 //    @JsonProperty("average_rating")

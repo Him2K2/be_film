@@ -21,11 +21,8 @@ public class Role {
     @Column(name = "rolename")
     private String roleName;
 
-    @ManyToMany
-    @JoinTable(
-            name = "role_user",
-            joinColumns = @JoinColumn(name = "roleid"),
-            inverseJoinColumns = @JoinColumn(name = "userid"))
-    private Set<User> users = new HashSet<>();
+    public static String USER = "USER";
+    public static String ADMIN = "ADMIN";
+
 
 }

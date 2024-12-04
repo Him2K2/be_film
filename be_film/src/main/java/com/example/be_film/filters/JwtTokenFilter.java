@@ -31,28 +31,39 @@ public class JwtTokenFilter extends OncePerRequestFilter{
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
-        if(isBypassToken(request)){
-            filterChain.doFilter(request, response);//enable bypass
-            return;
-        }
 
-        ///code cos kiem tra
-        final String authHeader = request.getHeader("Authorization");
-        if(authHeader!= null && authHeader.startsWith("Bearer ")){
-            final String token = authHeader.substring(7);
-            final String userName = jwtTokenUtil.extracUserName(token);
-            if(userName != null && SecurityContextHolder.getContext().getAuthentication()==null){
-                UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
-                if(jwtTokenUtil.validateToken(token, userDetails)){
-                    UsernamePasswordAuthenticationToken authenticationToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
-                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                }
+
+        try{
+
+            if(isBypassToken(request)){
+                filterChain.doFilter(request, response);//enable bypass
+                return;
             }
 
+            ///code cos kiem tra
+            final String authHeader = request.getHeader("Authorization");
+            if(authHeader!= null && authHeader.startsWith("Bearer ")){
+                final String token = authHeader.substring(7);
+                final String userName = jwtTokenUtil.extracUserName(token);
+                if(userName != null && SecurityContextHolder.getContext().getAuthentication()==null){
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+                    if(jwtTokenUtil.validateToken(token, userDetails)){
+                        UsernamePasswordAuthenticationToken authenticationToken =
+                                new UsernamePasswordAuthenticationToken(userDetails, null,userDetails.getAuthorities());
+                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    }
+                }
 
+
+            }
+            filterChain.doFilter(request, response);//enable pypass
+
+        }catch (Exception e){
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Unauthorized");
         }
+
+
 
 
 

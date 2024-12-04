@@ -25,6 +25,8 @@ public class Film {
     private String filmName;
     @Column(name="img_film")
     private String imgFilm;
+    @Column(name="img_bannerfilm")
+    private String imgBannerFilm;
     @Column(name="url_film")
     private String urlFilm;
     private int duration;

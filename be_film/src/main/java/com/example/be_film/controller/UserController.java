@@ -23,7 +23,8 @@ public class UserController {
 
     private final UserService userService;
     @PostMapping("/register")
-    public ResponseEntity<?> createUser (@Valid @RequestBody UserDTO userDTO, BindingResult result) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO, BindingResult result) {
+
         try {
             if (result.hasErrors()) {
                 List<String> errorMessages = result.getFieldErrors()
@@ -32,21 +33,13 @@ public class UserController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
-            // Kiểm tra mật khẩu và mật khẩu xác nhận
-            if (!userDTO.getPassword().equals(userDTO.getRetypePassword())) {
-                return ResponseEntity.badRequest().body("Passwords do not match");
-            }
-
-            User user = userService.createUser (userDTO);
-            return ResponseEntity.ok(user);
+            if (!userDTO.getPassword().equals(userDTO.getRetypePassword()))
+                return ResponseEntity.ok("Register fail");
+            userService.createUser(userDTO);
+            return ResponseEntity.ok("Success");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
-
-
-
-
 
     }
     @PostMapping("/login")

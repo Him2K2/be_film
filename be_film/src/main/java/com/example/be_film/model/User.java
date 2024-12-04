@@ -9,9 +9,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-
 
 @Entity
 @Table(name="user")
@@ -19,7 +19,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User  implements UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,14 +27,18 @@ public class User  implements UserDetails {
     private String name;
     private String password;
     private String email;
+
     @Column(name="date_of_birth")
-    private int DateOfBirth;
+    private int DateOfBirth; // Change to LocalDate for Date of Birth
+
     private int budget;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
+
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
+
     @PrePersist
     public void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -47,20 +51,17 @@ public class User  implements UserDetails {
         updatedAt = LocalDateTime.now();
     }
 
-
-    @ManyToMany(mappedBy = "users")
-    private Set<Role> role = new HashSet<>();
-
-
+    @ManyToOne
+    @JoinColumn(name="role_id")
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authoritiesList = new ArrayList<>();
-        for (Role r : this.role) {
-            authoritiesList.add(new SimpleGrantedAuthority("ROLE_" + r.getRoleName()));
-        }
+        authoritiesList.add(new SimpleGrantedAuthority("ROLE_" + this.role.getRoleName().toUpperCase())); // Only one role
         return authoritiesList;
     }
+
     @Override
     public String getUsername(){
         return username;
@@ -86,7 +87,3 @@ public class User  implements UserDetails {
         return true;
     }
 }
-
-
-
-

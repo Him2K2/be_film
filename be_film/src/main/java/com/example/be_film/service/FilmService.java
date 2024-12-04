@@ -20,6 +20,7 @@ public class FilmService implements iFilmService{
         Film newFilm = Film.builder()
                 .filmName(filmDTO.getFilmname())
                 .imgFilm(filmDTO.getImgFilm())
+                .imgBannerFilm(filmDTO.getImgBannerFilm())
                 .urlFilm(filmDTO.getUrlFilm())
                 .duration(filmDTO.getDuration())
                 .status(filmDTO.getStatus())
