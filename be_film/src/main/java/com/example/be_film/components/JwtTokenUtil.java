@@ -27,11 +27,13 @@ public class JwtTokenUtil {
         //properties -> claims
         Map<String,Object>claims = new HashMap<>();
         claims.put("username", user.getUsername());
+        claims.put("role", user.getRole().getRoleName());
         try{
             String token = Jwts.builder()
                     .setClaims(claims)
                     .setSubject(user.getUsername())
                     .setExpiration(new Date(System.currentTimeMillis()+expiration*1000L))
+//                    .claim("roles", user.getRole())
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
 

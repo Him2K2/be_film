@@ -26,6 +26,7 @@ import java.util.Arrays;
 public class JwtTokenFilter extends OncePerRequestFilter{
     private final UserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
@@ -73,6 +74,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         final List<Pair<String,String>> bypassTokens = Arrays.asList(
                 Pair.of("/api/v1/films", "GET"),
                 Pair.of("/api/v1/users/login","POST"),
+                Pair.of("/api/v1/users/**","GET"),
                 Pair.of("/api/v1/users/register","POST"),
                 Pair.of("/api/v1/genre", "GET")
 

@@ -82,7 +82,17 @@ public class UserService implements IUserService{
         );
         //authenticate with java spring security;
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
         return jwtTokenUtil.generateToken(existingUser);
     }
+
+    @Override
+    public User getUserByUserName(String username) throws DataNotFoundException {
+
+
+
+        return userRepository.findByUsername(username).orElseThrow(()->new DataNotFoundException("khong thay user trong database"));
+    }
+
 
 }

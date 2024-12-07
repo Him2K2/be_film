@@ -1,6 +1,8 @@
 package com.example.be_film.controller;
 
 import com.example.be_film.dtos.*;
+import com.example.be_film.exceptions.DataNotFoundException;
+import com.example.be_film.model.Film;
 import com.example.be_film.model.User;
 import com.example.be_film.service.UserService;
 import jakarta.validation.Valid;
@@ -9,14 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -52,6 +52,16 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+    }
+    @GetMapping("/{username}" )
+  /*  @CrossOrigin("http://localhost:3000/")*/
+    public ResponseEntity<User> getUserByUserName(@PathVariable String username){
+        try{
+            User user = userService.getUserByUserName(username);
+            return ResponseEntity.ok(user);
+        } catch (DataNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

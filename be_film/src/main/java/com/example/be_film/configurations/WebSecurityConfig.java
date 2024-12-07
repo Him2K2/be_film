@@ -24,6 +24,7 @@ public class WebSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) // Vô hiệu hóa CSRF
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class) // Thêm bộ lọc JWT
+
                 .authorizeHttpRequests(requests -> requests
                         // Các endpoint công khai
                         .requestMatchers(
@@ -32,19 +33,21 @@ public class WebSecurityConfig {
                                 "/api/v1/films"
                         ).permitAll()
 
-                        // Các endpoint yêu cầu quyền ADMIN với PUT và DELETE
+//                         Các endpoint yêu cầu quyền ADMIN với PUT và DELETE
                         .requestMatchers(PUT, "/api/v1/films/**").hasRole(Role.ADMIN)
                         .requestMatchers(DELETE, "/api/v1/films/**").hasRole(Role.ADMIN)
                         .requestMatchers(POST, "/api/v1/films").hasRole(Role.ADMIN)
                         .requestMatchers(POST, "/api/v1/Payment/create").hasRole(Role.USER)
                         .requestMatchers(DELETE, "/api/v1/films/**").hasRole(Role.ADMIN)
-                        .requestMatchers(GET,"%s/api,v1.films/**").hasAnyRole(Role.ADMIN,Role.USER)
+                        .requestMatchers(GET,"/api/v1/films/**").hasAnyRole(Role.ADMIN,Role.USER)
+                        .requestMatchers(GET,"/api/v1/users/**").hasAnyRole(Role.ADMIN,Role.USER)
 
 
 
-                        // Yêu cầu xác thực cho tất cả các endpoint khác
+//                         Yêu cầu xác thực cho tất cả các endpoint khác
                         .anyRequest().authenticated()
-                );
+                )
+        ;
 
         return http.build();
     }

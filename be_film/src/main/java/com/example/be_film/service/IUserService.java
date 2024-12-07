@@ -8,5 +8,6 @@ import com.example.be_film.model.User;
 public interface IUserService{
     User createUser(UserDTO userDTO) throws DataNotFoundException, PermissonDenyException;
     String login(String username,String password) throws DataNotFoundException;
+    User getUserByUserName(String username)throws DataNotFoundException;
 
 }
