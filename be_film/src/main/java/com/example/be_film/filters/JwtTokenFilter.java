@@ -73,8 +73,8 @@ public class JwtTokenFilter extends OncePerRequestFilter{
     private boolean isBypassToken(@NonNull HttpServletRequest request){
         final List<Pair<String,String>> bypassTokens = Arrays.asList(
                 Pair.of("/api/v1/films", "GET"),
+                Pair.of("/api/v1/films/**", "GET"),
                 Pair.of("/api/v1/users/login","POST"),
-                Pair.of("/api/v1/users/**","GET"),
                 Pair.of("/api/v1/users/register","POST"),
                 Pair.of("/api/v1/genre", "GET")
 

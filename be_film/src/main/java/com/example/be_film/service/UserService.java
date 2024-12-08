@@ -12,6 +12,8 @@ import com.example.be_film.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -93,6 +95,12 @@ public class UserService implements IUserService{
 
         return userRepository.findByUsername(username).orElseThrow(()->new DataNotFoundException("khong thay user trong database"));
     }
+
+    @Override
+    public Page<User> getAllUser(PageRequest pageRequest) {
+        return userRepository.findAll(pageRequest);
+    }
+
 
 
 }

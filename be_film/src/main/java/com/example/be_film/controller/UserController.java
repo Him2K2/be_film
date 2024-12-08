@@ -7,6 +7,8 @@ import com.example.be_film.model.User;
 import com.example.be_film.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000",allowCredentials = "true")
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -62,6 +64,15 @@ public class UserController {
         } catch (DataNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+    @GetMapping( )
+    /*  @CrossOrigin("http://localhost:3000/")*/
+    public ResponseEntity<Page<User>> getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<User> users = userService.getAllUser(pageRequest);
+        return ResponseEntity.ok(users);
     }
 }
 
