@@ -2,6 +2,7 @@ package com.example.be_film.service;
 
 import com.example.be_film.components.JwtTokenUtil;
 import com.example.be_film.dtos.UserDTO;
+import com.example.be_film.dtos.UserEditDTO;
 import com.example.be_film.exceptions.DataNotFoundException;
 import com.example.be_film.exceptions.PermissonDenyException;
 import com.example.be_film.model.Role;
@@ -11,6 +12,7 @@ import com.example.be_film.repositories.UserRepository;
 
 import lombok.AllArgsConstructor;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +27,7 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserService implements IUserService{
+    private final ModelMapper modelMapper;
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -91,16 +94,37 @@ public class UserService implements IUserService{
     @Override
     public User getUserByUserName(String username) throws DataNotFoundException {
 
-
-
         return userRepository.findByUsername(username).orElseThrow(()->new DataNotFoundException("khong thay user trong database"));
     }
+
+
 
     @Override
     public Page<User> getAllUser(PageRequest pageRequest) {
         return userRepository.findAll(pageRequest);
     }
 
+    @Override
+    public User editUser(UserEditDTO userDTO, String username) throws Exception {
+        User user = userRepository.findByUsername(username).orElseThrow(()->new DataNotFoundException("khong thay user trong database"));
+
+        modelMapper.typeMap(UserEditDTO.class, User.class);
+
+        user.setName(userDTO.getName());
+        user.setUsername(userDTO.getUsername());
+        user.setBudget(userDTO.getBudget());
+        user.setDateOfBirth(userDTO.getBirth());
+
+        return userRepository.save(user);
+    }
+
+    @Override
+    public void deleteUser(long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {  // Kiểm tra xem người dùng có tồn tại hay không
+            userRepository.delete(user.get());  // Xóa người dùng nếu tồn tại
+        }
+    }
 
 
 }

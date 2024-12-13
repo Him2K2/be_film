@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin("http://localhost:3000/")
 @RequestMapping("/api/v1/films")
@@ -20,14 +22,20 @@ import org.springframework.web.bind.annotation.*;
 public class FilmController {
     private final FilmService filmService;
 
-
-
-
     @PostMapping
     public ResponseEntity<Film> createFilm(@RequestBody FilmDTO filmDTO) {
         Film createdFilm = filmService.createFilm(filmDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdFilm);
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<Film>> searchFilms(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "5") int less
+    ) {
+        List<Film> films = filmService.searchFilms(keyword, less);
+        return ResponseEntity.ok(films);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Film> getFilmById(@PathVariable long id) {
@@ -60,7 +68,7 @@ public class FilmController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFilm(@PathVariable long id) {
+    public ResponseEntity<Void> deleteFilm(@PathVariable long id) throws DataNotFoundException {
         filmService.deleteFilm(id);
         return ResponseEntity.noContent().build();
     }

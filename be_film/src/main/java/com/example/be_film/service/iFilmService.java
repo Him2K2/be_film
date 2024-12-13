@@ -12,6 +12,6 @@ public interface iFilmService
     Film getFilmById(long id) throws DataNotFoundException;
     Page<Film> getAllFilm(PageRequest pageRequest);
     Film updateFilm(long id,FilmDTO filmDTO) throws Exception;
-    void deleteFilm(long id);
+    void deleteFilm(long id) throws DataNotFoundException;
     boolean existByName(String nameFilm);
 }

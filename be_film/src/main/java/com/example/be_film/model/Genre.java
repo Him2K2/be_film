@@ -1,5 +1,6 @@
 package com.example.be_film.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,11 +21,13 @@ public class Genre {
     @Column(name="genre_name")
     private String genreName;
 
-    @ManyToMany
-    @JoinTable(
-            name = "genre_film",
-            joinColumns = @JoinColumn(name = "genreid"),
-            inverseJoinColumns = @JoinColumn(name = "filmid"))
-    private Set<Film> film_genre = new HashSet<>();
+    @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Film> films = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Genre{id=" + id + ", genreName='" + genreName + "'}";
+    }
 
 }

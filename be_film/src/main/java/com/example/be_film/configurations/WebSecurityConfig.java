@@ -39,7 +39,7 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/api/v1/users/register",
                                 "/api/v1/users/login",
-                                "/api/v1/films"
+                                "/api/v1/films/**"
                         ).permitAll()
 
                         .requestMatchers(PUT, "/api/v1/films/**").hasRole(Role.ADMIN)
@@ -49,6 +49,10 @@ public class WebSecurityConfig {
                         .requestMatchers(GET, "/api/v1/films/**").hasAnyRole(Role.ADMIN, Role.USER)
                         .requestMatchers(GET, "/api/v1/users/**").hasAnyRole(Role.ADMIN, Role.USER)
                         .requestMatchers(GET, "/api/v1/users/").hasRole(Role.ADMIN)
+                        .requestMatchers(GET, "/api/v1/users/**").hasRole(Role.ADMIN)
+                        .requestMatchers(GET, "/api/v1/users/**").hasRole(Role.ADMIN)
+                        .requestMatchers(POST, "/api/v1/users/").hasRole(Role.ADMIN)
+                        .requestMatchers(PUT, "/api/v1/users/**").hasRole(Role.ADMIN)
 
 
 

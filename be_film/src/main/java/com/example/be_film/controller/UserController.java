@@ -2,7 +2,6 @@ package com.example.be_film.controller;
 
 import com.example.be_film.dtos.*;
 import com.example.be_film.exceptions.DataNotFoundException;
-import com.example.be_film.model.Film;
 import com.example.be_film.model.User;
 import com.example.be_film.service.UserService;
 import jakarta.validation.Valid;
@@ -35,6 +34,7 @@ public class UserController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
+
             if (!userDTO.getPassword().equals(userDTO.getRetypePassword()))
                 return ResponseEntity.ok("Register fail");
             userService.createUser(userDTO);
@@ -65,7 +65,7 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
-    @GetMapping( )
+    @GetMapping()
     /*  @CrossOrigin("http://localhost:3000/")*/
     public ResponseEntity<Page<User>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
@@ -74,5 +74,26 @@ public class UserController {
         Page<User> users = userService.getAllUser(pageRequest);
         return ResponseEntity.ok(users);
     }
+
+    @PutMapping("/edit/{username}")
+    public UserEditDTO editUser(@Valid @RequestBody UserEditDTO userEditDTO, @PathVariable("username") String username) throws Exception {
+        User userUpdated = userService.editUser(userEditDTO, username);
+        UserEditDTO responseDTO = new UserEditDTO(
+                userUpdated.getName(),
+                userUpdated.getUsername(),
+                userUpdated.getDateOfBirth(),
+                userUpdated.getBudget()
+        );
+
+        return responseDTO;
+    }
+
+    @DeleteMapping("/{user_id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("user_id") long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok("Delete User Successfully with id: " + userId);
+    }
+
+
 }
 
