@@ -21,13 +21,8 @@ public class Genre {
     @Column(name="genre_name")
     private String genreName;
 
-    @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<Film> films = new HashSet<>();
 
-    @Override
-    public String toString() {
-        return "Genre{id=" + id + ", genreName='" + genreName + "'}";
-    }
+    @OneToMany(mappedBy = "genres")
+    private Set<FilmGenre> listFilmGenre;
 
 }

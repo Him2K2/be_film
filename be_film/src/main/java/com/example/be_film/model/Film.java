@@ -54,20 +54,8 @@ public class Film {
     }
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinTable(
-            name = "genre_film",
-
-            joinColumns = @JoinColumn(name = "filmid"),
-            inverseJoinColumns = @JoinColumn(name = "genreid")
-    )
-    private Set<Genre> genres = new HashSet<>();
-
-    @Override
-    public String toString() {
-        return "Film{id=" + id + ", filmName='" + filmName + "', genres=" + genres.size() + "}";
-    }
+    @OneToMany(mappedBy = "films")
+    private Set<FilmGenre> listFilmGenre;
 
 
 
