@@ -13,6 +13,8 @@ public interface IUserService{
     String login(String username,String password) throws DataNotFoundException;
     User getUserByUserName(String username) throws DataNotFoundException;
 
+    User recharge(int budget,String username) throws DataNotFoundException;
+
     Page<User> getAllUser(PageRequest pageRequest);
 
 

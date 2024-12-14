@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PaymentDTO {
-    private Long userId;
+    private String username;
     private Long filmId;
     private int amount;
     private String status;
