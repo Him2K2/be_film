@@ -29,10 +29,10 @@ public class PaymentService implements IPaymentService{
     ModelMapper modelMapper;
     @Override
     public Boolean createPaymentAndChangeMount(PaymentDTO paymentDTO) throws DataNotFoundException {
-        User user = userRepository.findById(paymentDTO.getUserId()).orElseThrow(()
-                -> new DataNotFoundException("can't find userid " + paymentDTO.getUserId()));
+        User user = userRepository.findByUsername(paymentDTO.getUsername()).orElseThrow(()
+                -> new DataNotFoundException("can't find userid " + paymentDTO.getUsername()));
         Film film = filmRepository.findById(paymentDTO.getFilmId()).orElseThrow(()
-                -> new DataNotFoundException("can't find userid " + paymentDTO.getUserId()));
+                -> new DataNotFoundException("can't find userid " + paymentDTO.getFilmId()));
         // tru tien
         user.setBudget(user.getBudget() - paymentDTO.getAmount());
         //luu lai ban ghi vua tru tien
@@ -44,6 +44,9 @@ public class PaymentService implements IPaymentService{
         payment.setStatus(paymentDTO.getStatus());
 
         paymentRepository.save(payment);
+
+        film.setStatus(paymentDTO.getStatus());
+        filmRepository.save(film);
         return true;
     }
 

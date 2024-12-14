@@ -56,7 +56,7 @@ public class UserController {
 
     }
     @GetMapping("/{username}" )
-  /*  @CrossOrigin("http://localhost:3000/")*/
+    /*  @CrossOrigin("http://localhost:3000/")*/
     public ResponseEntity<User> getUserByUserName(@PathVariable String username){
         try{
             User user = userService.getUserByUserName(username);
@@ -86,6 +86,17 @@ public class UserController {
         );
 
         return responseDTO;
+    }
+    @PostMapping("/recharge")
+    public ResponseEntity<User> recharge(@RequestParam int budget, @RequestParam String username) {
+        try {
+            User updatedUser = userService.recharge(budget, username);
+            return ResponseEntity.ok(updatedUser);
+        } catch (DataNotFoundException e) {
+            return ResponseEntity.status(404).body(null);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @DeleteMapping("/{user_id}")

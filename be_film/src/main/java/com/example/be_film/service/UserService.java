@@ -97,6 +97,19 @@ public class UserService implements IUserService{
         return userRepository.findByUsername(username).orElseThrow(()->new DataNotFoundException("khong thay user trong database"));
     }
 
+    @Override
+    public User recharge(int budget,String username) throws DataNotFoundException {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy người dùng với username: " + username));
+
+        if (budget <= 0) {
+            throw new IllegalArgumentException("Số tiền nạp phải lớn hơn 0");
+        }
+        int currentBudget = user.getBudget();
+        user.setBudget(currentBudget + budget);
+        return userRepository.save(user);
+    }
 
 
     @Override
@@ -121,8 +134,8 @@ public class UserService implements IUserService{
     @Override
     public void deleteUser(long userId) {
         Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {  // Kiểm tra xem người dùng có tồn tại hay không
-            userRepository.delete(user.get());  // Xóa người dùng nếu tồn tại
+        if (user.isPresent()) {
+            userRepository.delete(user.get());
         }
     }
 
